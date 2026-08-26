@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://hd-gaming-officiel.pages.dev/sitemap.xml

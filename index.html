@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HD-Gaming officiel — Téléchargement de jeux mobiles</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #060a14;
+    --bg-panel: #0d1526;
+    --bg-panel-2: #111b30;
+    --line: #1c2740;
+    --text: #eaf0fb;
+    --text-dim: #8b96b3;
+    --blue: #2e8bff;
+    --blue-bright: #5ec9ff;
+    --cyan: #26e0ff;
+    --gold: #f4c95d;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overflow-x:hidden;
+  }
+  h1,h2,h3,.brand,.tag{
+    font-family: 'Chakra Petch', sans-serif;
+  }
+  a{color:inherit; text-decoration:none;}
+
+  /* ambient glow background */
+  body::before{
+    content:"";
+    position:fixed; inset:0;
+    background:
+      radial-gradient(circle at 20% -10%, rgba(46,139,255,0.25), transparent 45%),
+      radial-gradient(circle at 90% 15%, rgba(38,224,255,0.12), transparent 40%);
+    pointer-events:none;
+    z-index:0;
+  }
+
+  .wrap{max-width:480px; margin:0 auto; position:relative; z-index:1;}
+
+  /* header */
+  header{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:16px 18px;
+    border-bottom:1px solid var(--line);
+    position:sticky; top:0;
+    background:rgba(6,10,20,0.85);
+    backdrop-filter: blur(10px);
+    z-index:20;
+  }
+  .brand-mark{display:flex; align-items:center; gap:10px;}
+  .infinity{width:34px; height:20px; flex-shrink:0;}
+  .brand-text{font-weight:700; font-size:17px; letter-spacing:0.3px;}
+  .brand-text span{color:var(--blue-bright);}
+  .menu-btn{
+    width:38px; height:38px; border-radius:10px;
+    background:var(--bg-panel); border:1px solid var(--line);
+    display:flex; align-items:center; justify-content:center;
+    color:var(--text);
+  }
+  .menu-btn svg{width:18px; height:18px; display:block;}
+  .menu-btn{ border:1px solid var(--line); cursor:pointer; }
+
+  .menu-overlay{
+    position:fixed; inset:0; z-index:50;
+    background:rgba(2,4,10,0.6); backdrop-filter:blur(2px);
+    display:none;
+  }
+  .menu-overlay.open{ display:block; }
+  .menu-panel{
+    position:absolute; top:0; right:0; height:100%; width:76%; max-width:320px;
+    background:var(--bg-panel); border-left:1px solid var(--line);
+    padding:70px 20px 20px; display:flex; flex-direction:column; gap:4px;
+  }
+  .menu-item{
+    padding:13px 12px; border-radius:10px; font-size:14.5px; font-weight:500;
+    color:var(--text); display:flex; align-items:center; gap:10px;
+  }
+  .menu-item:active{ background:var(--bg-panel-2); }
+  .menu-item-fav{ margin-top:10px; border-top:1px solid var(--line); padding-top:16px; color:var(--blue-bright); }
+
+  /* hero */
+  .hero{
+    padding:40px 20px 28px;
+    text-align:center;
+    position:relative;
+  }
+  .hero-ring{
+    width:210px; height:130px;
+    margin:0 auto 22px;
+    position:relative;
+  }
+  .hero-ring svg{width:100%; height:100%; overflow:visible;}
+  .hero h1{
+    font-size:26px;
+    line-height:1.25;
+    font-weight:700;
+    margin-bottom:10px;
+  }
+  .hero h1 em{
+    font-style:normal;
+    background:linear-gradient(90deg, var(--blue-bright), var(--cyan));
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+  }
+  .hero p{
+    color:var(--text-dim);
+    font-size:14.5px;
+    line-height:1.6;
+    max-width:340px;
+    margin:0 auto 22px;
+  }
+  .search-bar{
+    display:flex; align-items:center; gap:10px;
+    background:var(--bg-panel);
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:13px 16px;
+    max-width:400px;
+    margin:0 auto;
+  }
+  .search-bar svg{width:18px; height:18px; color:var(--text-dim); flex-shrink:0;}
+  .search-bar input{
+    background:none; border:none; outline:none;
+    color:var(--text); font-family:'Inter'; font-size:14.5px;
+    width:100%;
+  }
+  .search-bar input::placeholder{color:var(--text-dim);}
+
+  /* section label */
+  .section{padding:30px 18px 6px;}
+  .section-head{
+    display:flex; align-items:baseline; justify-content:space-between;
+    margin-bottom:14px;
+  }
+  .section-head h2{font-size:16px; font-weight:600;}
+  .section-head .see-all{font-size:12.5px; color:var(--blue-bright); font-family:'Inter'; font-weight:600;}
+
+  /* category chips */
+  .chips{
+    display:flex; gap:9px; overflow-x:auto; padding:0 18px 24px;
+    scrollbar-width:none;
+  }
+  .chips::-webkit-scrollbar{display:none;}
+  .chip{
+    flex-shrink:0;
+    padding:9px 16px;
+    border-radius:999px;
+    background:var(--bg-panel);
+    border:1px solid var(--line);
+    font-size:13px; font-weight:500;
+    color:var(--text-dim);
+    white-space:nowrap;
+  }
+  .chip.active{
+    background:linear-gradient(90deg, rgba(46,139,255,0.18), rgba(38,224,255,0.10));
+    border-color:rgba(94,201,255,0.5);
+    color:var(--blue-bright);
+  }
+
+  /* game cards */
+  .game-grid{
+    display:grid; grid-template-columns:1fr 1fr; gap:12px;
+    padding:0 18px;
+  }
+  .game-card{
+    background:var(--bg-panel);
+    border:1px solid var(--line);
+    border-radius:16px;
+    overflow:hidden;
+    transition:border-color .2s;
+    display:block;
+    color:inherit;
+  }
+  .game-card-wrap{ position:relative; animation: riseIn .5s ease-out backwards; }
+  .fav-btn{
+    position:absolute; top:8px; right:8px; z-index:5;
+    width:28px; height:28px; border-radius:8px;
+    background:rgba(6,10,20,0.7); border:1px solid rgba(255,255,255,0.15);
+    display:flex; align-items:center; justify-content:center;
+    color:#fff;
+  }
+  .fav-btn svg{ width:14px; height:14px; }
+  .fav-btn.active{ color:#ff5c7a; border-color:rgba(255,92,122,0.5); }
+  .thumb{
+    aspect-ratio:1/1;
+    background:linear-gradient(135deg, var(--bg-panel-2), #0a1220);
+    position:relative;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .thumb .ph-icon{width:34px; height:34px; color:var(--line); opacity:.9;}
+  .badge{
+    position:absolute; top:8px; left:8px;
+    background:rgba(6,10,20,0.85);
+    border:1px solid rgba(94,201,255,0.35);
+    color:var(--blue-bright);
+    font-size:10px; font-weight:700;
+    padding:3px 7px; border-radius:6px;
+    letter-spacing:.3px;
+  }
+  .game-info{padding:10px 11px 12px;}
+  .game-title{font-size:13.5px; font-weight:600; margin-bottom:3px; line-height:1.3;}
+  .game-meta{
+    display:flex; align-items:center; justify-content:space-between;
+    font-size:11px; color:var(--text-dim);
+  }
+  .game-meta .stars{color:var(--gold); display:flex; align-items:center; gap:3px;}
+
+  /* community */
+  .community{
+    margin:36px 18px 20px;
+    background:var(--bg-panel);
+    border:1px solid var(--line);
+    border-radius:18px;
+    padding:22px 18px;
+  }
+  .community h3{font-size:15.5px; font-weight:600; margin-bottom:4px;}
+  .community p{font-size:12.5px; color:var(--text-dim); margin-bottom:16px;}
+
+  .contact-block{
+    margin:0 18px 10px;
+    display:flex; align-items:center; justify-content:space-between; gap:10px;
+    padding:12px 14px; border-radius:12px;
+    background:var(--bg-panel); border:1px solid var(--line);
+    font-size:12px; color:var(--text-dim);
+  }
+  .contact-block a{ color:var(--blue-bright); font-weight:600; white-space:nowrap; }
+
+  .ad-slot{
+    margin:20px 18px; padding:10px;
+    background:var(--bg-panel); border:1px solid var(--line); border-radius:14px;
+    max-height:300px; overflow:hidden;
+    display:flex; flex-direction:column; align-items:center;
+  }
+  .ad-slot .ad-label{
+    font-size:9.5px; letter-spacing:.5px; text-transform:uppercase;
+    color:var(--text-dim); margin-bottom:8px; align-self:flex-start;
+  }
+  .social-row{display:flex; gap:10px;}
+  .social-btn{
+    flex:1;
+    display:flex; flex-direction:column; align-items:center; gap:6px;
+    padding:12px 6px;
+    border-radius:12px;
+    background:var(--bg-panel-2);
+    border:1px solid var(--line);
+    font-size:11px; color:var(--text-dim); font-weight:500;
+  }
+  .social-btn svg{width:19px; height:19px; color:var(--blue-bright);}
+
+  footer{
+    text-align:center; padding:26px 18px 34px;
+    color:var(--text-dim); font-size:11.5px;
+    border-top:1px solid var(--line);
+    margin-top:10px;
+  }
+  footer .infinity-sm{width:24px; height:14px; margin:0 auto 10px; display:block;}
+
+  /* animations légères */
+  .hero-ring svg, .infinity{ filter: drop-shadow(0 0 8px rgba(94,201,255,0.3)); }
+
+  @keyframes riseIn{
+    from{ opacity:0; transform: translateY(10px); }
+    to{ opacity:1; transform: translateY(0); }
+  }
+  .game-card-wrap:nth-child(1){ animation-delay: .05s; }
+  .game-card-wrap:nth-child(2){ animation-delay: .12s; }
+  .game-card-wrap:nth-child(3){ animation-delay: .19s; }
+  .game-card-wrap:nth-child(4){ animation-delay: .26s; }
+
+  .chip{ transition: background .2s, border-color .2s, color .2s; }
+  .search-bar{ transition: border-color .2s; }
+  .search-bar:focus-within{ border-color: rgba(94,201,255,0.5); }
+
+  @media (prefers-reduced-motion: reduce){
+    .hero-ring svg, .infinity, .game-card{ animation: none; }
+    circle animateMotion{ display:none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <header>
+    <div class="brand-mark">
+      <svg class="infinity" viewBox="0 0 200 100" fill="none">
+        <path d="M25,50 C25,28 45,18 65,18 C82,18 92,34 100,50 C108,66 118,82 135,82 C155,82 175,72 175,50 C175,28 155,18 135,18 C118,18 108,34 100,50 C92,66 82,82 65,82 C45,82 25,72 25,50 Z"
+          fill="url(#gradHead)"/>
+        <path d="M25,50 C25,32 42,23 60,23 C78,23 89,36 96,50 C89,64 78,77 60,77 C42,77 25,68 25,50 Z
+                 M175,50 C175,32 158,23 140,23 C122,23 111,36 104,50 C111,64 122,77 140,77 C158,77 175,68 175,50 Z"
+          fill="var(--bg)"/>
+        <polygon points="100,40 109,50 100,60 91,50" fill="#ffffff"/>
+        <defs>
+          <linearGradient id="gradHead" x1="0" y1="0" x2="200" y2="0">
+            <stop offset="0" stop-color="#1a6fe8"/>
+            <stop offset="1" stop-color="#26e0ff"/>
+          </linearGradient>
+        </defs>
+      </svg>
+      <div class="brand-text">HD-GAMING <span>officiel</span></div>
+    </div>
+    <button class="menu-btn" id="menuBtn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+    </button>
+  </header>
+
+  <div class="menu-overlay" id="menuOverlay">
+    <div class="menu-panel">
+      <a href="index.html" class="menu-item">Tous les jeux</a>
+      <a href="index.html?cat=Action" class="menu-item">Action</a>
+      <a href="index.html?cat=RPG" class="menu-item">RPG</a>
+      <a href="index.html?cat=Sport" class="menu-item">Sport</a>
+      <a href="index.html?cat=Mod%20APK" class="menu-item">Mod APK</a>
+      <a href="index.html?cat=ROMs%20%2F%20ISO" class="menu-item">ROMs / ISO</a>
+      <a href="favoris.html" class="menu-item menu-item-fav">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><path d="M12 21s-7-4.5-9.5-9C.5 8 2 4 6 4c2 0 3.5 1 4 2 .5-1 2-2 4-2 4 0 5.5 4 3.5 8-2.5 4.5-9.5 9-9.5 9z"/></svg>
+        Mes favoris
+      </a>
+    </div>
+  </div>
+
+  <section class="hero">
+    <div class="hero-ring">
+      <svg viewBox="0 0 200 100" fill="none">
+        <path id="infPath" d="M25,50 C25,28 45,18 65,18 C82,18 92,34 100,50 C108,66 118,82 135,82 C155,82 175,72 175,50 C175,28 155,18 135,18 C118,18 108,34 100,50 C92,66 82,82 65,82 C45,82 25,72 25,50 Z"
+          fill="url(#gradHero)" opacity="0.18" filter="blur(10px)" transform="scale(1.08)" transform-origin="100 50"/>
+        <path d="M25,50 C25,28 45,18 65,18 C82,18 92,34 100,50 C108,66 118,82 135,82 C155,82 175,72 175,50 C175,28 155,18 135,18 C118,18 108,34 100,50 C92,66 82,82 65,82 C45,82 25,72 25,50 Z"
+          fill="url(#gradHero)"/>
+        <path d="M25,50 C25,32 42,23 60,23 C78,23 89,36 96,50 C89,64 78,77 60,77 C42,77 25,68 25,50 Z
+                 M175,50 C175,32 158,23 140,23 C122,23 111,36 104,50 C111,64 122,77 140,77 C158,77 175,68 175,50 Z"
+          fill="var(--bg)" opacity="0.55"/>
+        <polygon points="100,42 107,50 100,58 93,50" fill="#ffffff"/>
+        <circle r="4" fill="url(#cometGlow)">
+          <animateMotion dur="7s" repeatCount="indefinite" calcMode="spline" keySplines="0.45 0 0.55 1"
+            path="M25,50 C25,28 45,18 65,18 C82,18 92,34 100,50 C108,66 118,82 135,82 C155,82 175,72 175,50 C175,28 155,18 135,18 C118,18 108,34 100,50 C92,66 82,82 65,82 C45,82 25,72 25,50 Z"/>
+        </circle>
+        <circle r="4" fill="url(#cometGlow2)">
+          <animateMotion dur="7s" repeatCount="indefinite" calcMode="spline" keySplines="0.45 0 0.55 1" keyPoints="1;0" keyTimes="0;1"
+            path="M25,50 C25,28 45,18 65,18 C82,18 92,34 100,50 C108,66 118,82 135,82 C155,82 175,72 175,50 C175,28 155,18 135,18 C118,18 108,34 100,50 C92,66 82,82 65,82 C45,82 25,72 25,50 Z"/>
+        </circle>
+        <defs>
+          <radialGradient id="cometGlow">
+            <stop offset="0%" stop-color="#ffffff"/>
+            <stop offset="60%" stop-color="#7fd4ff" stop-opacity="0.7"/>
+            <stop offset="100%" stop-color="#7fd4ff" stop-opacity="0"/>
+          </radialGradient>
+          <radialGradient id="cometGlow2">
+            <stop offset="0%" stop-color="#ffffff"/>
+            <stop offset="60%" stop-color="#26e0ff" stop-opacity="0.7"/>
+            <stop offset="100%" stop-color="#26e0ff" stop-opacity="0"/>
+          </radialGradient>
+        </defs>
+        <defs>
+          <linearGradient id="gradHero" x1="0" y1="0" x2="200" y2="0">
+            <stop offset="0" stop-color="#1a6fe8"/>
+            <stop offset="0.5" stop-color="#5ec9ff"/>
+            <stop offset="1" stop-color="#26e0ff"/>
+          </linearGradient>
+        </defs>
+      </svg>
+    </div>
+    <h1>Tous tes jeux mobiles,<br><em>en un seul endroit</em></h1>
+    <p>APK, mods, ROMs et ISO triés sur le volet — vérifiés, à jour, et prêts à télécharger.</p>
+    <div class="search-bar">
+      <svg id="searchIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="cursor:pointer;"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+      <input type="search" id="searchInput" placeholder="Chercher un jeu, un mod, une ROM...">
+    </div>
+  </section>
+
+  <div class="chips" id="chipRow">
+    <div class="chip active" data-cat="Tous">Tous</div>
+    <div class="chip" data-cat="Action">Action</div>
+    <div class="chip" data-cat="RPG">RPG</div>
+    <div class="chip" data-cat="Sport">Sport</div>
+    <div class="chip" data-cat="Mod APK">Mod APK</div>
+    <div class="chip" data-cat="ROMs / ISO">ROMs / ISO</div>
+  </div>
+
+  <section class="section">
+    <div class="section-head">
+      <h2>Les plus téléchargés</h2>
+      <span class="see-all">Voir tout</span>
+    </div>
+  </section>
+
+  <div class="game-grid" id="gameGrid">
+    <p style="grid-column:1/-1; text-align:center; color:var(--text-dim); font-size:13px; padding:20px 0;">Chargement des jeux...</p>
+  </div>
+
+  <div class="ad-slot">
+    <span class="ad-label">Publicité</span>
+    <script async="async" data-cfasync="false" src="https://pl31017078.profitableratecpmnetwork.com/9f0a10354aa8c8516337903f387c574d/invoke.js"></script>
+    <div id="container-9f0a10354aa8c8516337903f387c574d"></div>
+  </div>
+
+  <script>
+    const SUPABASE_URL = "https://aouuisrouenmqvzssbpp.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_nQ2k-gbKPLyZ_2Qw2AbqAA_9Y-PM9xC";
+
+    let allGames = [];
+    let activeCategory = new URLSearchParams(window.location.search).get('cat') || "Tous";
+
+    function getFavs(){
+      try{ return JSON.parse(localStorage.getItem('hdg_favs') || '[]'); }catch(e){ return []; }
+    }
+    function isFav(slug){ return getFavs().includes(slug); }
+    function toggleFav(slug){
+      let favs = getFavs();
+      if(favs.includes(slug)) favs = favs.filter(s => s !== slug);
+      else favs.push(slug);
+      localStorage.setItem('hdg_favs', JSON.stringify(favs));
+    }
+
+    function normalize(str){
+      return (str || "").toString().toLowerCase()
+        .normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    }
+
+    function renderGames(list){
+      const grid = document.getElementById('gameGrid');
+      if(!list.length){
+        grid.innerHTML = `<p style="grid-column:1/-1; text-align:center; color:var(--text-dim); font-size:13px; padding:20px 0;">Aucun résultat.</p>`;
+        return;
+      }
+      grid.innerHTML = list.map(g => `
+        <div class="game-card-wrap">
+          <a class="game-card" href="jeu.html?slug=${encodeURIComponent(g.slug || '')}">
+            <div class="thumb">
+              ${g.category ? `<span class="badge">${g.category}</span>` : ''}
+              ${g.thumbnail_url
+                ? `<img src="${g.thumbnail_url}" alt="${g.title || ''}" style="width:100%;height:100%;object-fit:cover;">`
+                : `<svg class="ph-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 12h8M12 8v8"/></svg>`
+              }
+            </div>
+            <div class="game-info">
+              <div class="game-title">${g.title || 'Sans titre'}</div>
+              <div class="game-meta"><span>${g.platform || ''}${g.platform && g.file_size ? ' · ' : ''}${g.file_size || ''}</span></div>
+            </div>
+          </a>
+          <button class="fav-btn ${isFav(g.slug) ? 'active' : ''}" data-slug="${g.slug || ''}" aria-label="Ajouter aux favoris">
+            <svg viewBox="0 0 24 24" fill="${isFav(g.slug) ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-4.5-9.5-9C.5 8 2 4 6 4c2 0 3.5 1 4 2 .5-1 2-2 4-2 4 0 5.5 4 3.5 8-2.5 4.5-9.5 9-9.5 9z"/></svg>
+          </button>
+        </div>
+      `).join('');
+    }
+
+    function applyFilters(){
+      const q = normalize(document.getElementById('searchInput').value);
+      const filtered = allGames.filter(g => {
+        const matchCat = activeCategory === "Tous" || g.category === activeCategory;
+        const matchQuery = !q || normalize(g.title).includes(q) || normalize(g.category).includes(q) || normalize(g.platform).includes(q);
+        return matchCat && matchQuery;
+      });
+      renderGames(filtered);
+    }
+
+    async function loadGames(){
+      document.querySelectorAll('.chip').forEach(c => {
+        c.classList.toggle('active', c.dataset.cat === activeCategory);
+      });
+      const grid = document.getElementById('gameGrid');
+      try{
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/Games?select=*&order=created_at.desc`, {
+          headers: { "apikey": SUPABASE_KEY, "Authorization": `Bearer ${SUPABASE_KEY}` }
+        });
+        allGames = await res.json();
+        applyFilters();
+      }catch(err){
+        grid.innerHTML = `<p style="grid-column:1/-1; text-align:center; color:var(--text-dim); font-size:13px; padding:20px 0;">Impossible de charger les jeux pour le moment.</p>`;
+      }
+    }
+
+    document.getElementById('searchInput').addEventListener('input', applyFilters);
+    document.getElementById('searchIcon').addEventListener('click', applyFilters);
+    document.getElementById('searchInput').addEventListener('search', applyFilters);
+
+    document.getElementById('chipRow').addEventListener('click', (e) => {
+      const chip = e.target.closest('.chip');
+      if(!chip) return;
+      document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+      activeCategory = chip.dataset.cat;
+      applyFilters();
+    });
+
+    document.getElementById('gameGrid').addEventListener('click', (e) => {
+      const btn = e.target.closest('.fav-btn');
+      if(!btn) return;
+      e.preventDefault();
+      toggleFav(btn.dataset.slug);
+      btn.classList.toggle('active');
+      btn.querySelector('svg').setAttribute('fill', btn.classList.contains('active') ? 'currentColor' : 'none');
+    });
+
+    document.getElementById('menuBtn').addEventListener('click', () => {
+      document.getElementById('menuOverlay').classList.add('open');
+    });
+    document.getElementById('menuOverlay').addEventListener('click', (e) => {
+      if(e.target.id === 'menuOverlay') document.getElementById('menuOverlay').classList.remove('open');
+    });
+
+    document.querySelectorAll('.chip').forEach(c => {
+      c.classList.toggle('active', c.dataset.cat === activeCategory);
+    });
+
+    loadGames();
+  </script>
+
+  <div class="community">
+    <h3>Rejoins la communauté</h3>
+    <p>Reçois les nouveaux jeux en premier, discute, et participe.</p>
+    <div class="social-row">
+      <a class="social-btn" href="https://t.me/HDgamingz" target="_blank">
+        <svg viewBox="0 0 24 24" fill="#29A9EA"><path d="M12 2C6.5 2 2 6.5 2 12c0 5.5 4.5 10 10 10s10-4.5 10-10c0-5.5-4.5-10-10-10zm4.6 7.2l-1.6 7.6c-.1.5-.4.6-.9.4l-2.5-1.8-1.2 1.2c-.1.1-.3.2-.5.2l.2-2.7 5-4.5c.2-.2-.1-.3-.3-.1l-6.2 3.9-2.7-.8c-.6-.2-.6-.6.1-.9l10.5-4c.5-.2.9.1.8.9z"/></svg>
+        Telegram
+      </a>
+      <a class="social-btn" href="https://whatsapp.com/channel/0029VbBle4cGZNCreagMLl2u" target="_blank">
+        <svg viewBox="0 0 24 24" fill="#25D366"><path d="M12 2C6.5 2 2 6.4 2 11.9c0 3.1 1.5 5.9 3.9 7.7L5 22l2.7-1.4c1.3.4 2.7.6 4.3.6 5.5 0 10-4.4 10-9.9S17.5 2 12 2z"/></svg>
+        WhatsApp
+      </a>
+      <a class="social-btn" href="https://youtube.com/@hd-gaming-b4k" target="_blank">
+        <svg viewBox="0 0 24 24" fill="#FF0000"><path d="M23 12s0-3.7-.5-5.4c-.3-1-1-1.8-2-2C18.7 4 12 4 12 4s-6.7 0-8.5.6c-1 .2-1.7 1-2 2C1 8.3 1 12 1 12s0 3.7.5 5.4c.3 1 1 1.7 2 2C5.3 20 12 20 12 20s6.7 0 8.5-.6c1-.3 1.7-1 2-2 .5-1.7.5-5.4.5-5.4zM10 15.5v-7l6 3.5-6 3.5z"/></svg>
+        YouTube
+      </a>
+    </div>
+  </div>
+
+  <div class="contact-block">
+    <span>Une collaboration à proposer ?</span>
+    <a href="https://wa.me/2250501376154" target="_blank">Écris-moi sur WhatsApp →</a>
+  </div>
+
+  <footer>
+    <svg class="infinity-sm" viewBox="0 0 60 34" fill="none">
+      <path d="M15 17c0-7 5-12 10-12s7 5 10 8 6 8 10 8 10-5 10-12M15 17c0 7 5 12 10 12s7-5 10-8 6-8 10-8 10 5 10 12"
+        stroke="url(#gradFoot)" stroke-width="4" stroke-linecap="round"/>
+      <defs>
+        <linearGradient id="gradFoot" x1="0" y1="0" x2="60" y2="0">
+          <stop offset="0" stop-color="#2e8bff"/>
+          <stop offset="1" stop-color="#26e0ff"/>
+        </linearGradient>
+      </defs>
+    </svg>
+    HD-GAMING officiel — Tous droits réservés
+  </footer>
+
+</div>
+  <!-- Adsterra — scripts site-wide -->
+  <script src="https://pl31017077.profitableratecpmnetwork.com/af/6c/44/af6c449e016cb8062dfa501dfaba8e33.js"></script>
+  <script src="https://pl31017076.profitableratecpmnetwork.com/27/ec/67/27ec670ff54cef08512c20f3959ed604.js"></script>
+
+</body>
+</html>
